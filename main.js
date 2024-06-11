@@ -15,10 +15,22 @@ let habitaciones = [
 let reservas = [];
 
 class Reserva {
-	constructor(id, fechaInicio, fechaFin) {
+	constructor(
+		id,
+		fechaInicio,
+		fechaFin,
+		nombre,
+		apellido,
+		cantidadDePersonas,
+		total
+	) {
 		this.id = id;
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.cantidadDePersonas = cantidadDePersonas;
+		this.total = total;
 	}
 }
 
@@ -64,7 +76,9 @@ function condicionesDeBusqueda(fechaInicio, fechaFin, mayores, menores) {
 		return 0;
 	}
 }
+
 let btnSiguiente = document.querySelector("#siguiente");
+let btnAtras = document.querySelector("#atras");
 let buscarReservas = document.querySelector("#busqueda-reserva");
 let confirmaReserva = document.querySelector("#confirma-reserva");
 let btnBuscarReservas = document.querySelector("#btnBuscarReservas");
@@ -79,6 +93,12 @@ let menores = document.querySelector("#menores");
 let cambio = document.querySelector("#tipo-de-cambio");
 let fecNac = document.querySelector("#fechaDeNacimiento");
 fecNac.setAttribute("max", fechaFormateada);
+let emailReserva = document.querySelector("#emailReserva");
+let nombreReserva = document.querySelector("#nombreReserva");
+let apellidoReserva = document.querySelector("#apellidoReserva");
+let contactoReserva = document.querySelector("#contactoReserva");
+let fechaDeNacimiento = document.querySelector("#fechaDeNacimiento");
+
 
 function CompararFechas(fechaInicio, fechaFin) {
 	let dia1 = parseInt(fechaInicio.slice(0, 4));
@@ -148,7 +168,36 @@ btnBuscarReservas.addEventListener("click", () => {
 			buscarReservas.style.display = "none";
 			confirmaReserva.style.display = "flex";
 
-			//generarReserva(reservas, element.id, fechaInicio.value, fechaFin.value);
+			let reservaId = element.id;
+			let reservaFechaInicio = fechaInicio.value;
+			let reservaFechaFin = fechaFin.value;
+			let reservaTotal = precioAMostrar;
+			let reservaCantidadDePersonas =
+				parseInt(mayores.value) + parseInt(menores.value);
+			btnSiguiente.addEventListener("click", () => {
+				buscarReservas.style.display = "none";
+				confirmaReserva.style.display = "none";
+				let reservanombre = nombreReserva.value;
+				let reservaApellido = apellidoReserva.value;
+				let reservaTelefono = contactoReserva.value;
+				let reservaMail = emailReserva.value;
+				let reservaFechaDeNacimiento = fechaDeNacimiento.value;
+				aside.innerHTML=`
+					<div>
+						<p>Nombre<br>${reservanombre} ${reservaApellido}</p>
+						<p>Telefono<br>${reservaTelefono}</p>
+						<p>Email<br>${reservaMail}</p>
+						<p>Check-in: ${reservaFechaInicio}</p>
+						<p>Check-out: ${reservaFechaFin}</p>
+						<p>cantidad de personas: ${reservaCantidadDePersonas}</p>
+						<p>Total a pagar: $${reservaTotal} ${cambio.value}</p>
+						<button id="finalizarReserva">Finalizar</button>
+						</div>`;
+				let guardarReserva = aside.querySelector("#finalizarReserva");
+				guardarReserva.addEventListener("click", ()=>{
+					
+				})
+			});
 		});
 	});
 });
