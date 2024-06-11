@@ -61,18 +61,18 @@
         <form class="formulario" id="confirma-reserva">
             <h2>Datos personales</h2>
             <legend>Email</legend>
-            <input type="email" type="email" id="">
+            <input required type="email" name="email">
             <legend>Nombre</legend>
-            <input type="text" name="first_name">
+            <input required type="text" name="first_name">
             <legend>Apellido</legend>
-            <input type="text" name="last_name">
+            <input required type="text" name="last_name">
             <legend>Fecha de nacimiento</legend>
-            <input type="date" name="" id="fechaDeNacimiento" placeholder="Nacimiento">
+            <input required type="date" name="" id="fechaDeNacimiento">
             <legend>Telefono</legend>
-            <input type="tel" name="phone">
-            <div>
-                <button type="button">Siguiente</button>
-                <button type="button">Atras</button>
+            <input required type="tel" name="phone">
+            <div class="botonera">
+                <button type="button" id="siguiente">Siguiente</button>
+                <button type="button" id="atras">Atras</button>
             </div>
         </form>
     </main>

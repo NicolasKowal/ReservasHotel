@@ -64,7 +64,7 @@ function condicionesDeBusqueda(fechaInicio, fechaFin, mayores, menores) {
 		return 0;
 	}
 }
-
+let btnSiguiente = document.querySelector("#siguiente");
 let buscarReservas = document.querySelector("#busqueda-reserva");
 let confirmaReserva = document.querySelector("#confirma-reserva");
 let btnBuscarReservas = document.querySelector("#btnBuscarReservas");
@@ -120,13 +120,13 @@ btnBuscarReservas.addEventListener("click", () => {
 				precioAMostrar = element.precio * valorDolar * cantidadDeDias;
 				precioAMostrar = AgregarIva(precioAMostrar);
 				precioPorDia = element.precio * valorDolar;
-				precioPorDia = AgregarIva(element.precio);
+				precioPorDia = AgregarIva(precioPorDia);
 				break;
 			case "USD":
 				precioAMostrar = element.precio * cantidadDeDias;
 				precioAMostrar = AgregarIva(precioAMostrar);
 				precioPorDia = element.precio;
-				precioPorDia = AgregarIva(element.precio);
+				precioPorDia = AgregarIva(precioPorDia);
 				break;
 			default:
 				break;
@@ -137,8 +137,8 @@ btnBuscarReservas.addEventListener("click", () => {
 				<h3 class="h-40 w-100 text-center">Habitacion Nº${element.id}</h3>
 				<p class="h-20 w-90 text-center" >Cantidad de personas: ${element.cantidadpersonas}</p>
 				<p class="h-20 w-75 text-center" >Camas dobles: ${element.dobles}<br> camas individuales: ${element.individuales}</p>
-				<p class="h-20 w-80 text-center" >Precio por noche: $ ${precioPorDia} ${cambio.value}.</p>				
-				<p class="h-20 w-80 text-center" >Precio por ${cantidadDeDias} dias: $ ${precioAMostrar} ${cambio.value}.</p>
+				<p class="h-20 w-80 text-center" >Precio por noche: $${precioPorDia} ${cambio.value}.</p>				
+				<p class="h-20 w-80 text-center" >Precio por ${cantidadDeDias} dias: $${precioAMostrar} ${cambio.value}.</p>
 				<button class="h-25 w-50 rounded-3" id="btnReservar">Reservar</button>
 			</div>`;
 		aside.appendChild(habitacion);
