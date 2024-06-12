@@ -12,8 +12,6 @@ let habitaciones = [
 	{ id: 11, cantidadpersonas: 5, individuales: 5, dobles: 0, precio: 70 },
 ];
 
-let reservas = [];
-
 class Reserva {
 	constructor(
 		id,
@@ -21,19 +19,36 @@ class Reserva {
 		fechaFin,
 		nombre,
 		apellido,
-		cantidadDePersonas,
-		total
+		mail,
+		telefono,
+		fechaDeNacimiento,
+		total,
+		cambio
 	) {
 		this.id = id;
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
 		this.nombre = nombre;
 		this.apellido = apellido;
-		this.cantidadDePersonas = cantidadDePersonas;
+		this.mail = mail;
 		this.total = total;
+		this.fechaDeNacimiento = fechaDeNacimiento;
+		this.telefono = telefono;
+		this.cambio = cambio;
 	}
 }
-
+let reservas = [];
+const GuardarStorage = (array, nombre) => {
+	const listaJSON = JSON.stringify(array);
+	localStorage.setItem(nombre, listaJSON);
+};
+const CantidadJSON = localStorage.getItem("reservas");
+if (CantidadJSON) {
+	const Cantidad = JSON.parse(CantidadJSON);
+	reservas = Cantidad;
+} else {
+	reservas = [];
+}
 function generarReserva(array, habitacion, inicio, fin) {
 	let nuevaReserva = new Reserva(habitacion, inicio, fin);
 	array.push(nuevaReserva);
@@ -98,7 +113,6 @@ let nombreReserva = document.querySelector("#nombreReserva");
 let apellidoReserva = document.querySelector("#apellidoReserva");
 let contactoReserva = document.querySelector("#contactoReserva");
 let fechaDeNacimiento = document.querySelector("#fechaDeNacimiento");
-
 
 function CompararFechas(fechaInicio, fechaFin) {
 	let dia1 = parseInt(fechaInicio.slice(0, 4));
@@ -167,36 +181,40 @@ btnBuscarReservas.addEventListener("click", () => {
 			aside.innerHTML = "";
 			buscarReservas.style.display = "none";
 			confirmaReserva.style.display = "flex";
-
-			let reservaId = element.id;
-			let reservaFechaInicio = fechaInicio.value;
-			let reservaFechaFin = fechaFin.value;
-			let reservaTotal = precioAMostrar;
 			let reservaCantidadDePersonas =
 				parseInt(mayores.value) + parseInt(menores.value);
 			btnSiguiente.addEventListener("click", () => {
 				buscarReservas.style.display = "none";
 				confirmaReserva.style.display = "none";
-				let reservanombre = nombreReserva.value;
-				let reservaApellido = apellidoReserva.value;
-				let reservaTelefono = contactoReserva.value;
-				let reservaMail = emailReserva.value;
-				let reservaFechaDeNacimiento = fechaDeNacimiento.value;
-				aside.innerHTML=`
+				aside.innerHTML = `
 					<div>
-						<p>Nombre<br>${reservanombre} ${reservaApellido}</p>
-						<p>Telefono<br>${reservaTelefono}</p>
-						<p>Email<br>${reservaMail}</p>
-						<p>Check-in: ${reservaFechaInicio}</p>
-						<p>Check-out: ${reservaFechaFin}</p>
+						<p>Nombre<br>${nombreReserva.value} ${apellidoReserva.value}</p>
+						<p>Telefono<br>${contactoReserva.value}</p>
+						<p>Email<br>${emailReserva.value}</p>
+						<p>Check-in: ${fechaInicio.value}</p>
+						<p>Check-out: ${fechaFin.value}</p>
 						<p>cantidad de personas: ${reservaCantidadDePersonas}</p>
-						<p>Total a pagar: $${reservaTotal} ${cambio.value}</p>
+						<p>Total a pagar: $${precioAMostrar} ${cambio.value}</p>
 						<button id="finalizarReserva">Finalizar</button>
 						</div>`;
 				let guardarReserva = aside.querySelector("#finalizarReserva");
-				guardarReserva.addEventListener("click", ()=>{
-					
-				})
+				guardarReserva.addEventListener("click", () => {
+					let nuevaReserva = new Reserva(
+						element.id,
+						fechaInicio.value,
+						fechaFin.value,
+						nombreReserva.value,
+						apellidoReserva.value,
+						emailReserva.value,
+						contactoReserva.value,
+						fechaDeNacimiento.value,
+						precioAMostrar,
+						cambio.value
+					);
+					reservas.push(nuevaReserva);
+					GuardarStorage(reservas, "reservas");
+					console.log(reservas);
+				});
 			});
 		});
 	});
