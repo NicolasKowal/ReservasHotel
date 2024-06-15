@@ -177,12 +177,10 @@ btnBuscarReservas.addEventListener("click", () => {
 			</div>`;
 		aside.appendChild(habitacion);
 
-		btnAtras.addEventListener("click", () =>{
+		btnAtras.addEventListener("click", () => {
 			buscarReservas.style.display = "flex";
 			confirmaReserva.style.display = "none";
-		})
-
-
+		});
 
 		let btnReservar = habitacion.querySelector("#btnReservar");
 		btnReservar.addEventListener("click", () => {
@@ -205,7 +203,7 @@ btnBuscarReservas.addEventListener("click", () => {
 						<p>Total a pagar: $${precioAMostrar} ${cambio.value}</p>
 						<button type="button" id="finalizarReserva">Finalizar</button>
 						<button type="button" id="volverAreserva">Atras</button>
-						</div>`;/*
+						</div>`; /*
 				let volverAreserva = aside.querySelector("#volverAreserva");
 				volverAreserva,addEventListener("click", ()=>{
 					confirmaReserva.style.display = "flex";
@@ -229,11 +227,11 @@ btnBuscarReservas.addEventListener("click", () => {
 					GuardarStorage(reservas, "reservas");
 					buscarReservas.style.display = "flex";
 					aside.innerHTML = "";
-					fechaInicio.value="";
-					fechaFin.value="";
-					mayores.value=0;
-					menores.value=0;
-					cambio.value="ARS";
+					fechaInicio.value = "";
+					fechaFin.value = "";
+					mayores.value = 0;
+					menores.value = 0;
+					cambio.value = "ARS";
 					emailReserva.value = "";
 					nombreReserva.value = "";
 					apellidoReserva.value = "";
@@ -244,6 +242,3 @@ btnBuscarReservas.addEventListener("click", () => {
 		});
 	});
 });
-
-
-
