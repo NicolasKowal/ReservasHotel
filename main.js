@@ -37,6 +37,7 @@ class Reserva {
 		this.cambio = cambio;
 	}
 }
+
 let reservas = [];
 const GuardarStorage = (array, nombre) => {
 	const listaJSON = JSON.stringify(array);
@@ -49,6 +50,7 @@ if (CantidadJSON) {
 } else {
 	reservas = [];
 }
+
 function generarReserva(array, habitacion, inicio, fin) {
 	let nuevaReserva = new Reserva(habitacion, inicio, fin);
 	array.push(nuevaReserva);
@@ -69,11 +71,16 @@ const fechaFormateada = `${año}-${mes}-${dia}`;
 
 const AgregarIva = (numero) => {
 	let valor = parseInt(numero);
-	return valor + (21 * parseInt(valor)) / 100;
+	return valor + (21 * valor) / 100;
 };
 
-function buscarReserva(array, habitacion, inicio, fin) {
-	array.find((element) => {});
+function CompararFechas(fechaInicio, fechaFin) {
+	const fecha1 = new Date(fechaInicio);
+	const fecha2 = new Date(fechaFin);
+
+	const diferenciaMilisegundos = fecha2 - fecha1;
+	const milisegundosPorDia = 1000 * 60 * 60 * 24;
+	return Math.floor(diferenciaMilisegundos / milisegundosPorDia) + 1;
 }
 
 function condicionesDeBusqueda(fechaInicio, fechaFin, mayores, menores) {
@@ -114,24 +121,6 @@ let apellidoReserva = document.querySelector("#apellidoReserva");
 let contactoReserva = document.querySelector("#contactoReserva");
 let fechaDeNacimiento = document.querySelector("#fechaDeNacimiento");
 
-function CompararFechas(fechaInicio, fechaFin) {
-	let dia1 = parseInt(fechaInicio.slice(0, 4));
-	let mes1 = parseInt(fechaInicio.slice(5, 7)) - 1;
-	let año1 = parseInt(fechaInicio.slice(8, 10));
-	let dia2 = parseInt(fechaFin.slice(0, 4));
-	let mes2 = parseInt(fechaFin.slice(5, 7)) - 1;
-	let año2 = parseInt(fechaFin.slice(8, 10));
-
-	let fecha1 = new Date(dia1, mes1, año1);
-	fecha1.setHours(14);
-	let fecha2 = new Date(dia2, mes2, año2);
-	fecha2.setHours(10);
-
-	const diferenciaMilisegundos = fecha2 - fecha1;
-	const milisegundosPorDia = 1000 * 60 * 60 * 24;
-	return Math.floor(diferenciaMilisegundos / milisegundosPorDia) + 1;
-}
-
 btnBuscarReservas.addEventListener("click", () => {
 	let cantidadDeDias = CompararFechas(fechaInicio.value, fechaFin.value);
 	aside.innerHTML = "";
@@ -151,16 +140,13 @@ btnBuscarReservas.addEventListener("click", () => {
 		let precioPorDia;
 		switch (cambio.value) {
 			case "ARS":
-				precioAMostrar = element.precio * valorDolar * cantidadDeDias;
-				precioAMostrar = AgregarIva(precioAMostrar);
 				precioPorDia = element.precio * valorDolar;
 				precioPorDia = AgregarIva(precioPorDia);
+				precioAMostrar = precioPorDia * cantidadDeDias;
 				break;
 			case "USD":
-				precioAMostrar = element.precio * cantidadDeDias;
-				precioAMostrar = AgregarIva(precioAMostrar);
-				precioPorDia = element.precio;
-				precioPorDia = AgregarIva(precioPorDia);
+				precioPorDia = AgregarIva(element.precio);
+				precioAMostrar = precioPorDia * cantidadDeDias;
 				break;
 			default:
 				break;
@@ -169,76 +155,92 @@ btnBuscarReservas.addEventListener("click", () => {
 		habitacion.innerHTML = `
 			<div class="border rounded-3 p-2 d-flex flex-column justify-content-center align-items-center">
 				<h3 class="h-40 w-100 text-center">Habitacion Nº${element.id}</h3>
-				<p class="h-20 w-90 text-center" >Cantidad de personas: ${element.cantidadpersonas}</p>
-				<p class="h-20 w-75 text-center" >Camas dobles: ${element.dobles}<br> camas individuales: ${element.individuales}</p>
-				<p class="h-20 w-80 text-center" >Precio por noche: $${precioPorDia} ${cambio.value}.</p>				
-				<p class="h-20 w-80 text-center" >Precio por ${cantidadDeDias} dias: $${precioAMostrar} ${cambio.value}.</p>
-				<button class="h-25 w-50 rounded-3" id="btnReservar">Reservar</button>
+				<p class="h-20 w-90 text-center" >Cantidad de personas: ${
+					element.cantidadpersonas
+				}</p>
+				<p class="h-20 w-75 text-center" >Camas dobles: ${
+					element.dobles
+				}<br> camas individuales: ${element.individuales}</p>
+				<p class="h-20 w-80 text-center" >Precio por noche: $${precioPorDia.toFixed(
+					2
+				)} ${cambio.value}.</p>				
+				<p class="h-20 w-80 text-center" >Precio por ${cantidadDeDias} días: $${precioAMostrar.toFixed(
+			2
+		)} ${cambio.value}.</p>
+				<button class="h-25 w-50 rounded-3" id="btnReservar${
+					element.id
+				}">Reservar</button>
 			</div>`;
 		aside.appendChild(habitacion);
 
-		btnAtras.addEventListener("click", () => {
-			buscarReservas.style.display = "flex";
-			confirmaReserva.style.display = "none";
-		});
-
-		let btnReservar = habitacion.querySelector("#btnReservar");
-		btnReservar.addEventListener("click", () => {
-			aside.innerHTML = "";
-			buscarReservas.style.display = "none";
-			confirmaReserva.style.display = "flex";
-			let reservaCantidadDePersonas =
-				parseInt(mayores.value) + parseInt(menores.value);
-			btnSiguiente.addEventListener("click", () => {
+		document
+			.querySelector(`#btnReservar${element.id}`)
+			.addEventListener("click", () => {
+				aside.innerHTML = "";
 				buscarReservas.style.display = "none";
-				confirmaReserva.style.display = "none";
-				aside.innerHTML = `
+				confirmaReserva.style.display = "flex";
+				let reservaCantidadDePersonas =
+					parseInt(mayores.value) + parseInt(menores.value);
+
+				btnSiguiente.onclick = () => {
+					buscarReservas.style.display = "none";
+					confirmaReserva.style.display = "none";
+					aside.innerHTML = `
 					<div>
 						<p>Nombre<br>${nombreReserva.value} ${apellidoReserva.value}</p>
-						<p>Telefono<br>${contactoReserva.value}</p>
+						<p>Teléfono<br>${contactoReserva.value}</p>
 						<p>Email<br>${emailReserva.value}</p>
 						<p>Check-in: ${fechaInicio.value}</p>
 						<p>Check-out: ${fechaFin.value}</p>
-						<p>cantidad de personas: ${reservaCantidadDePersonas}</p>
-						<p>Total a pagar: $${precioAMostrar} ${cambio.value}</p>
+						<p>Cantidad de personas: ${reservaCantidadDePersonas}</p>
+						<p>Total a pagar: $${precioAMostrar.toFixed(2)} ${cambio.value}</p>
 						<button type="button" id="finalizarReserva">Finalizar</button>
-						<button type="button" id="volverAreserva">Atras</button>
-						</div>`; /*
-				let volverAreserva = aside.querySelector("#volverAreserva");
-				volverAreserva,addEventListener("click", ()=>{
-					confirmaReserva.style.display = "flex";
-					aside.innerHTML="";
-				});*/
-				let guardarReserva = aside.querySelector("#finalizarReserva");
-				guardarReserva.addEventListener("click", () => {
-					let nuevaReserva = new Reserva(
-						element.id,
-						fechaInicio.value,
-						fechaFin.value,
-						nombreReserva.value,
-						apellidoReserva.value,
-						emailReserva.value,
-						contactoReserva.value,
-						fechaDeNacimiento.value,
-						precioAMostrar,
-						cambio.value
-					);
-					reservas.push(nuevaReserva);
-					GuardarStorage(reservas, "reservas");
-					buscarReservas.style.display = "flex";
-					aside.innerHTML = "";
-					fechaInicio.value = "";
-					fechaFin.value = "";
-					mayores.value = 0;
-					menores.value = 0;
-					cambio.value = "ARS";
-					emailReserva.value = "";
-					nombreReserva.value = "";
-					apellidoReserva.value = "";
-					fechaDeNacimiento.value = "";
-					contactoReserva.value = "";
-				});
+						<button type="button" id="volverAreserva">Atrás</button>
+					</div>`;
+
+					document
+						.querySelector("#finalizarReserva")
+						.addEventListener("click", () => {
+							let nuevaReserva = new Reserva(
+								element.id,
+								fechaInicio.value,
+								fechaFin.value,
+								nombreReserva.value,
+								apellidoReserva.value,
+								emailReserva.value,
+								contactoReserva.value,
+								fechaDeNacimiento.value,
+								precioAMostrar,
+								cambio.value
+							);
+							reservas.push(nuevaReserva);
+							GuardarStorage(reservas, "reservas");
+							buscarReservas.style.display = "flex";
+							aside.innerHTML = "";
+							fechaInicio.value = "";
+							fechaFin.value = "";
+							mayores.value = 0;
+							menores.value = 0;
+							cambio.value = "ARS";
+							emailReserva.value = "";
+							nombreReserva.value = "";
+							apellidoReserva.value = "";
+							fechaDeNacimiento.value = "";
+							contactoReserva.value = "";
+						});
+
+					document
+						.querySelector("#volverAreserva")
+						.addEventListener("click", () => {
+							confirmaReserva.style.display = "flex";
+							aside.innerHTML = "";
+						});
+				};
 			});
-		});
 	});
+});
+
+btnAtras.addEventListener("click", () => {
+	buscarReservas.style.display = "flex";
+	confirmaReserva.style.display = "none";
 });
