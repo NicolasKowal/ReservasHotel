@@ -3,6 +3,8 @@
 	padding: 0;
 	margin: 0;
 }
+
+$paleta: #ffffff, #ffddcd, #ffbb9c, #fa996c, #ef763d;
 #busqueda-reserva {
 	display: flex;
 }
@@ -12,25 +14,25 @@
 	display: none;
 	flex-direction: column;
 	justify-content: center;
-}
-.formulario h2 {
-	margin: 0 auto;
-}
-.formulario legend {
-	font-size: 1em;
-}
-.formulario select,
-.formulario input {
-	height: 30px;
-	width: 250px;
-	border-radius: 5px;
-	color: black;
-}
-.formulario button {
-	margin: 0 auto;
-	height: 50px;
-	width: 100px;
-	border-radius: 5px;
+	h2 {
+		margin: 0 auto;
+	}
+	legend {
+		font-size: 1em;
+	}
+	select,
+	input {
+		height: 30px;
+		width: 250px;
+		border-radius: 5px;
+		color: black;
+	}
+	button {
+		margin: 0 auto;
+		height: 50px;
+		width: 100px;
+		border-radius: 5px;
+	}
 }
 #erroresDeBusqueda {
 	height: 75px;
@@ -62,26 +64,33 @@
 }
 .encabezado {
 	grid-area: header;
+	background: nth($paleta, 4);
 }
 .navegacion {
 	grid-area: nav;
+	background: nth($paleta, 5);
+}
+.xcard {
+	background: nth($paleta, 1);
 }
 .principal {
 	grid-area: main;
+	background: nth($paleta, 2);
 }
 .lado {
+	background: nth($paleta, 3);
 	grid-area: aside;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	grid-auto-rows: auto;
+	display: flex;
+	flex-wrap: wrap;
 	gap: 10px;
-}
-.lado div {
-	height: 300px;
-	width: 300px;
+	div {
+		height: 300px;
+		width: 300px;
+	}
 }
 .pie {
 	grid-area: footer;
+	background: nth($paleta, 5);
 }
 .encabezado,
 .navegacion,

@@ -187,7 +187,7 @@ btnBuscarReservas.addEventListener("click", () => {
 
 			let habitacion = document.createElement("div");
 			habitacion.innerHTML = `
-                <div class="border rounded-3 p-2 d-flex flex-column justify-content-center align-items-center">
+                <div class="xcard border rounded-3 p-2 d-flex flex-column justify-content-center align-items-center">
                     <h3 class="h-40 w-100 text-center">Habitacion Nº${
 											element.id
 										}</h3>
