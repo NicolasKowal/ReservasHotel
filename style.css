@@ -32,6 +32,15 @@
 	width: 100px;
 	border-radius: 5px;
 }
+#erroresDeBusqueda {
+	height: 75px;
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+	color: red;
+	font-size: 1em;
+	text-transform: capitalize;
+}
 .botonera {
 	height: 100px;
 	width: 100%;
