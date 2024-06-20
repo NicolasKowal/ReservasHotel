@@ -10,6 +10,15 @@ let habitaciones = [
 	{ id: 9, cantidadpersonas: 2, individuales: 0, dobles: 1, precio: 25 },
 	{ id: 10, cantidadpersonas: 1, individuales: 1, dobles: 0, precio: 20 },
 	{ id: 11, cantidadpersonas: 5, individuales: 5, dobles: 0, precio: 70 },
+	{ id: 12, cantidadpersonas: 4, individuales: 2, dobles: 1, precio: 45 },
+	{ id: 13, cantidadpersonas: 3, individuales: 1, dobles: 1, precio: 30 },
+	{ id: 14, cantidadpersonas: 4, individuales: 2, dobles: 0, precio: 35 },
+	{ id: 15, cantidadpersonas: 2, individuales: 1, dobles: 0, precio: 20 },
+	{ id: 16, cantidadpersonas: 3, individuales: 1, dobles: 1, precio: 33 },
+	{ id: 17, cantidadpersonas: 2, individuales: 0, dobles: 1, precio: 28 },
+	{ id: 18, cantidadpersonas: 4, individuales: 3, dobles: 0, precio: 50 },
+	{ id: 19, cantidadpersonas: 1, individuales: 1, dobles: 0, precio: 18 },
+	{ id: 20, cantidadpersonas: 2, individuales: 2, dobles: 0, precio: 22 },
 ];
 
 class Reserva {
@@ -132,29 +141,31 @@ btnBuscarReservas.addEventListener("click", () => {
 		parseInt(menores.value)
 	);
 	erroresDeBusqueda.textContent = retornoBusqueda;
-
+	let listaIdReservados = [];
 	if (erroresDeBusqueda.textContent == "") {
-		console.log(reservas);
-		/*----------------*/
-
+		let reservasFiltrada = reservas.filter((element) => {
+			console.log(fechaInicio.value);
+			console.log(element.fechaInicio);
+			if (
+				/*!*/ element.fechaInicio <= fechaFin.value &&
+				element.fechaFin >= fechaInicio.value
+			) {
+				return element, listaIdReservados.push(element.id);
+			}
+		});
+		console.log(reservasFiltrada);
+		console.log(listaIdReservados);
 		let habitacionesFiltradas = habitaciones.filter(
 			(element) =>
 				element.cantidadpersonas ===
 				parseInt(mayores.value) + parseInt(menores.value)
 		);
-		let reservasFiltrada = reservas.filter((element) => {
-			console.log(fechaInicio.value);
-			console.log(element.fechaInicio);
-			if (
-				!(
-					element.fechaInicio <= fechaFin.value &&
-					element.fechaFin >= fechaInicio.value
-				)
-			) {
+
+		habitacionesFiltradas = habitacionesFiltradas.filter((element) => {
+			if (!listaIdReservados.includes(element.id)) {
 				return element;
 			}
 		});
-		console.log(reservasFiltrada);
 
 		habitacionesFiltradas.forEach((element) => {
 			let precioAMostrar;
