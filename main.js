@@ -3,7 +3,7 @@ let habitaciones = [
 	{ id: 2, cantidadpersonas: 3, individuales: 1, dobles: 1, precio: 35 },
 	{ id: 3, cantidadpersonas: 4, individuales: 2, dobles: 1, precio: 40 },
 	{ id: 4, cantidadpersonas: 3, individuales: 1, dobles: 1, precio: 35 },
-	{ id: 5, cantidadpersonas: 4, individuales: 0, dobles: 2, precio: 70 },
+	{ id: 5, cantidadpersonas: 4, individuales: 0, dobles: 1, precio: 70 },
 	{ id: 6, cantidadpersonas: 5, individuales: 3, dobles: 1, precio: 50 },
 	{ id: 7, cantidadpersonas: 5, individuales: 3, dobles: 1, precio: 50 },
 	{ id: 8, cantidadpersonas: 2, individuales: 2, dobles: 0, precio: 25 },
@@ -85,17 +85,17 @@ function CompararFechas(fechaInicio, fechaFin) {
 
 function condicionesDeBusqueda(fechaInicio, fechaFin, mayores, menores) {
 	if (fechaInicio > fechaFin) {
-		return 1;
+		return "la fecha de finalizacion esta antes que la de inicio";
 	} else if (fechaInicio == 0 && fechaFin == 0) {
-		return 2;
+		return "fecha no seleccionada";
 	} else if (fechaInicio < fechaFormateada) {
-		return 3;
+		return "fecha anterior al dia de hoy";
 	} else if (mayores + menores <= 0) {
-		return 4;
+		return "seleccionar cantidad de personas";
 	} else if (mayores == 0) {
-		return 5;
+		return "tiene que seleccionar un mayor de edad";
 	} else {
-		return 0;
+		return "";
 	}
 }
 
@@ -120,6 +120,8 @@ let nombreReserva = document.querySelector("#nombreReserva");
 let apellidoReserva = document.querySelector("#apellidoReserva");
 let contactoReserva = document.querySelector("#contactoReserva");
 let fechaDeNacimiento = document.querySelector("#fechaDeNacimiento");
+let erroresDeBusqueda = document.querySelector("#erroresDeBusqueda");
+erroresDeBusqueda.textContent = "";
 
 btnBuscarReservas.addEventListener("click", () => {
 	let cantidadDeDias = CompararFechas(fechaInicio.value, fechaFin.value);
@@ -130,6 +132,7 @@ btnBuscarReservas.addEventListener("click", () => {
 		parseInt(mayores.value),
 		parseInt(menores.value)
 	);
+	erroresDeBusqueda.textContent = retornoBusqueda;
 	let habitacionesFiltradas = habitaciones.filter(
 		(element) =>
 			element.cantidadpersonas ===
